@@ -16,7 +16,7 @@ defmodule ContractsTest do
     ensures empty?(result) && result.in_valve == :closed && result.out_valve == :closed
     def empty(tank) do
       %Tank{tank | level: 1, out_valve: :closed}
-      # %Tank{tank | level: 0, out_valve: :closed}
+      # %Tank{tank | level: 0, out_valve: :closed} # correct implementation
     end
 
     def full?(tank) do
@@ -28,16 +28,21 @@ defmodule ContractsTest do
     end
   end
 
-  test "fill/1 fills the tank with water" do
-    tank = %Tank{level: 10}
-    # tank = %Tank{level: 5, in_valve: :open}
-    tank = Tank.fill(tank)
-    assert Tank.full?(tank)
+  describe "failing precondition" do
+    test "fill/1 function with a :closed in_valve raises" do
+      tank = %Tank{level: 10, in_valve: :closed}
+      assert_raise RuntimeError, "Precondition not met: not full?(tank) && tank.in_valve() == :open && tank.out_valve() == :closed", fn->
+        Tank.fill(tank)
+      end
+    end
   end
 
-  test "empty/1 empties the tank" do
-    tank = %Tank{level: 10, out_valve: :open}
-    tank = Tank.empty(tank)
-    assert Tank.empty?(tank)
+  describe "failing postcondition" do
+    test "buggy empty/1 function does not correctly empty the tank" do
+      tank = %Tank{level: 10, out_valve: :open}
+      assert_raise RuntimeError, "Postcondition not met: empty?(result) && result.in_valve() == :closed && result.out_valve() == :closed", fn->
+        Tank.empty(tank)
+      end
+    end
   end
 end
