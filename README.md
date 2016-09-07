@@ -1,6 +1,11 @@
 Contracts
 =========
 
+[![Build status](https://travis-ci.org/ruby2elixir/elixir-contracts.svg "Build status")](https://travis-ci.org/ruby2elixir/elixir-contracts)
+[![Hex version](https://img.shields.io/hexpm/v/contracts.svg "Hex version")](https://hex.pm/packages/contracts)
+![Hex downloads](https://img.shields.io/hexpm/dt/contracts.svg "Hex downloads")
+
+
 Design by Contract for Elixir
 
 
