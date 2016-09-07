@@ -27,6 +27,22 @@ defmodule Contracts.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [
+      {:earmark, "~> 0.2", only: :dev},
+      {:ex_doc, "~> 0.11", only: :dev}
+    ]
+  end
+
+
+  defp package do
+    [
+     maintainers: ["Guillermo Iguaran", "Elba Sanchez Marquez", "Roman Heinrich"],
+     licenses: ["MIT License"],
+     description: "Design by Contracts for Elixir",
+     links: %{
+       github: "https://github.com/ruby2elixir/elixir-contracts",
+       docs: "http://hexdocs.pm/contracts/#{@version}/"
+     }
+    ]
   end
 end
