@@ -8,6 +8,9 @@ use Mix.Config
 # if you want to provide default values for your application for third-
 # party users, it should be done in your mix.exs file.
 
+config :contracts,
+  enabled: true
+
 # Sample configuration:
 #
 #     config :logger, :console,

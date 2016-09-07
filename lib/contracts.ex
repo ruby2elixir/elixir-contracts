@@ -23,22 +23,32 @@ defmodule Contracts do
     Agent.update(__name__(__CALLER__), &%{&1 | post: post})
   end
 
-  defmacro def(definition, do: content) do
-    %{pre: pre, post: post} = Agent.get(__name__(__CALLER__), &(&1))
+  if Contracts.Config.is_enabled? do
+    defmacro def(definition, do: content) do
+      %{pre: pre, post: post} = Agent.get(__name__(__CALLER__), &(&1))
 
-    ast = quote do
-      Kernel.def(unquote(definition)) do
-        unless unquote(pre), do: raise "Precondition not met: #{unquote(Macro.to_string(pre))}"
+      ast = quote do
+        Kernel.def(unquote(definition)) do
+          unless unquote(pre), do: raise "Precondition not met: #{unquote(Macro.to_string(pre))}"
 
-        var!(result) = unquote(content)
+          var!(result) = unquote(content)
 
-        unless unquote(post), do: raise "Postcondition not met: #{unquote(Macro.to_string(post))}"
+          unless unquote(post), do: raise "Postcondition not met: #{unquote(Macro.to_string(post))}"
 
-        var!(result)
+          var!(result)
+        end
+      end
+      Agent.update(__name__(__CALLER__), fn _ -> @default end)
+
+      ast
+    end
+  else
+    defmacro def(definition, do: content) do
+      quote do
+        Kernel.def(unquote(definition)) do
+          unquote(content)
+        end
       end
     end
-    Agent.update(__name__(__CALLER__), fn _ -> @default end)
-
-    ast
   end
 end
