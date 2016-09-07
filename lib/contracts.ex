@@ -28,9 +28,11 @@ defmodule Contracts do
 
     ast = quote do
       Kernel.def(unquote(definition)) do
-        unless unquote(pre), do: raise "Precondition not met: blame the client"
+        unless unquote(pre), do: raise "Precondition not met: #{unquote(Macro.to_string(pre))}"
+
         var!(result) = unquote(content)
-        unless unquote(post), do: raise "Postcondition not met: blame yourself"
+
+        unless unquote(post), do: raise "Postcondition not met: #{unquote(Macro.to_string(post))}"
 
         var!(result)
       end
