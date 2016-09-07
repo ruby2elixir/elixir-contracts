@@ -8,6 +8,8 @@ Usage
 ======
 
 ```elixir
+use Contracts
+
 requires x > 0
 ensures (result * result) <= x && (result+1) * (result+1) > x
 def sqrt(x) do
